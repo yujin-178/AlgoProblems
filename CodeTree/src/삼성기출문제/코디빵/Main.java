@@ -1,6 +1,4 @@
-package 기말시험.코디빵;
-
-import com.sun.source.tree.Tree;
+package 삼성기출문제.코디빵;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -84,11 +82,11 @@ public class Main {
         int k = breads.poll();
         ans[human.order] += k;
         moves.put(time + human.calcTime(0, 0) * 2, human);
-        System.out.println("편의점  " + human.order + " : buy " + k+", time : "+time);
+        System.out.println("편의점  " + human.order + " : buy " + k + ", time : " + time);
     }
 
     static void goBuy(int time, Info event) {
-        if(house.isEmpty())
+        if (house.isEmpty())
             return;
 
         if (!breads.isEmpty()) {
@@ -108,7 +106,7 @@ public class Main {
         int y = event.y;
         moves.put(time + human.calcTime(x, y) * 2, human);
         ans[human.order] += event.k;
-        System.out.println("당근 " + human.order + " : buy " + event.k +", time : "+time);
+        System.out.println("당근 " + human.order + " : buy " + event.k + ", time : " + time);
     }
 
     static void simul() {
