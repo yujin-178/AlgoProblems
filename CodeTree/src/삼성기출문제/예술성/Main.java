@@ -1,6 +1,8 @@
 package 삼성기출문제.예술성;
+// https://www.codetree.ai/frequent-problems/artistry/description
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -14,11 +16,49 @@ public class Main {
     static int[] dc = {-1, 1, 0, 0};
 
     public static void main(String[] args) throws IOException {
+        System.setIn(new FileInputStream("input/예술성_input"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         init(br);
         System.out.println(simul());
     }
 
+    static void crossCCRotate() {
+        int[][] tmp = new int[N][N];
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < N; c++) {
+                tmp[r][c] = map[c][N - 1 - r];
+            }
+        }
+        for (int r = 0; r < N; r++) {
+            map[r][N / 2] = tmp[r][N / 2];
+        }
+        for (int c = 0; c < N; c++) {
+            map[N / 2][c] = tmp[N / 2][c];
+        }
+    }
+
+    static void smallSqaureRotate(int sr, int sc) {
+        int[][] tmp = new int[N / 2][N / 2];
+        int[][] tmp2 = new int[N / 2][N / 2];
+
+        for (int r = 0; r < N / 2; r++) {
+            for (int c = 0; c < N / 2; c++) {
+                tmp[r][c] = map[sr + r][sc + c];
+            }
+        }
+
+        for (int r = 0; r < N / 2; r++) {
+            for (int c = 0; c < N / 2; c++) {
+                tmp2[r][c] = tmp[N / 2 - 1 - c][r];
+            }
+        }
+
+        for (int r = 0; r < N / 2; r++) {
+            for (int c = 0; c < N / 2; c++) {
+                map[sr + r][sc + c] = tmp2[r][c];
+            }
+        }
+    }
 
     static int simul() {
         int score = 0;
@@ -45,10 +85,17 @@ public class Main {
         score += tmp / 2;
 
         for (int i = 0; i < 3; i++) {
+
+//            printMap("이전");
             // 메인 십자 회전
-
+            crossCCRotate();
+//            printMap("십자 회전");
             // 4분할 사각형 회전
-
+            smallSqaureRotate(0, 0);
+            smallSqaureRotate(N / 2 + 1, 0);
+            smallSqaureRotate(0, N / 2 + 1);
+            smallSqaureRotate(N / 2 + 1, N / 2 + 1);
+//            printMap("작은 사각형 회전");
             // 그룹 결정 bfs && 그룹 정보 저장
             groupInfo = new HashMap<>();
             chk = new boolean[N][N];
@@ -73,6 +120,16 @@ public class Main {
 
         }
         return score;
+    }
+
+    static void printMap(String str) {
+        System.out.println(str);
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < N; c++) {
+                System.out.print(map[r][c] + " ");
+            }
+            System.out.println();
+        }
     }
 
     static void setGroup(int r, int c, int idx) {
